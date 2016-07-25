@@ -1,0 +1,14 @@
+= Title
+authorFirst authorMiddle authorLast <author@email.com>
+:doctype: book
+:encoding: utf-8
+:lang: en
+:description: HTML Description only
+:revdate: July 25, 2016
+:revnumber: 1.0
+:revremark: Initial setup
+:imagesdir: ./images
+:stylesdir: ./styles
+:toc: left
+:toclevels: 3
+:numbered:

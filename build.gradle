@@ -1,0 +1,53 @@
+buildscript {
+    dependencies {
+        classpath 'org.asciidoctor:asciidoctorj-pdf:1.5.0-alpha.11'
+
+        classpath "gradle.plugin.org.aim42:htmlSanityCheck:0.9.3"
+    }
+}
+
+plugins {
+    id 'org.asciidoctor.convert' version '1.5.3'
+}
+
+apply plugin: 'org.asciidoctor.convert'
+apply plugin: "org.aim42.htmlSanityCheck"
+
+String asciidocSrcPath = "$projectDir/asciidoc"
+String imagesSrcPath = "$asciidocSrcPath/images"
+
+String outputPath = "$buildDir/docs"
+String htmlOutputPath = "$outputPath/html5"
+String targetImagesPath = "$htmlOutputPath/images"
+
+String checkingResultsPath = "$buildDir/reports/htmlchecks"
+
+asciidoctor {
+    backends = ['html5', 'pdf', 'docbook']
+    sourceDir = file(asciidocSrcPath)
+    outputDir = file(outputPath)
+    attributes 'source-highlighter' : 'coderay',
+            doctype: 'book',
+            'imagesdir': './images'
+
+    resources {
+        from (imagesSrcPath)
+        into targetImagesPath
+    }
+}
+
+htmlSanityCheck {
+    dependsOn asciidoctor
+
+    sourceDir = file(htmlOutputPath)
+
+    checkingResultsPath = file(checkingResultsPath)
+
+    checkExternalLinks = true
+}
+
+build.dependsOn htmlSanityCheck
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.14.1'
+}
